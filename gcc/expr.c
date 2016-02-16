@@ -2206,7 +2206,7 @@ copy_blkmode_to_reg (machine_mode mode, tree src)
 
   x = expand_normal (src);
 
-  bytes = (type_is_empty_record_p (TREE_TYPE (src))
+  bytes = (type_is_empty_type_p (TREE_TYPE (src))
 	   ? 0 : int_size_in_bytes (TREE_TYPE (src)));
   if (bytes == 0)
     return NULL_RTX;

@@ -1159,12 +1159,12 @@ initialize_argument_information (int num_actuals ATTRIBUTE_UNUSED,
   bitmap_obstack_initialize (NULL);
 
   /* In this loop, we consider args in the order they are written.
-     We fill up ARGS from the back.  Warn empty record if they are used
+     We fill up ARGS from the back.  Warn empty type if they are used
      in a variable argument list or they aren't the last arguments.
-     Set warn_empty_record to true if we don't warn empty record to
+     Set warn_empty_type to true if we don't warn empty type to
      avoid walking arguments.  */
-  bool seen_empty_record = false;
-  bool warn_empty_record
+  bool seen_empty_type = false;
+  bool warn_empty_type
     = (!warn_psabi || stdarg_p (fndecl ? TREE_TYPE (fndecl) : fntype));
 
   i = num_actuals - 1;
@@ -1198,13 +1198,13 @@ initialize_argument_information (int num_actuals ATTRIBUTE_UNUSED,
       {
 	tree argtype = TREE_TYPE (arg);
 
-	if (!warn_empty_record)
+	if (!warn_empty_type)
 	  {
 	    if (argtype != error_mark_node
-		&& type_is_empty_record_p (argtype))
-	      seen_empty_record = true;
-	    else if (seen_empty_record)
-	      warn_empty_record = true;
+		&& type_is_empty_type_p (argtype))
+	      seen_empty_type = true;
+	    else if (seen_empty_type)
+	      warn_empty_type = true;
 	  }
 
 	/* Remember last param with pointer and associate it
@@ -1423,11 +1423,11 @@ initialize_argument_information (int num_actuals ATTRIBUTE_UNUSED,
 
       args[i].reg = function_arg (args_so_far, mode, type,
 				  argpos < n_named_args,
-				  warn_empty_record);
+				  warn_empty_type);
 
-      /* Only warn empty record once.  */
-      if (type_is_empty_record_p (type))
-	warn_empty_record = false;
+      /* Only warn empty type once.  */
+      if (type_is_empty_type_p (type))
+	warn_empty_type = false;
 
       if (args[i].reg && CONST_INT_P (args[i].reg))
 	{
@@ -4865,7 +4865,7 @@ store_one_arg (struct arg_data *arg, rtx argblock, int flags,
 	 Note that in C the default argument promotions
 	 will prevent such mismatches.  */
 
-      if (type_is_empty_record_p (TREE_TYPE (pval)))
+      if (type_is_empty_type_p (TREE_TYPE (pval)))
 	size = 0;
       else
 	size = GET_MODE_SIZE (arg->mode);
@@ -4937,13 +4937,13 @@ store_one_arg (struct arg_data *arg, rtx argblock, int flags,
 	{
 	  /* PUSH_ROUNDING has no effect on us, because emit_push_insn
 	     for BLKmode is careful to avoid it.  */
-	  bool empty_record = type_is_empty_record_p (TREE_TYPE (pval));
+	  bool empty_type = type_is_empty_type_p (TREE_TYPE (pval));
 	  excess = (arg->locate.size.constant
-		    - (empty_record
+		    - (empty_type
 		       ? 0
 		       : int_size_in_bytes (TREE_TYPE (pval)))
 		    + partial);
-	  size_rtx = expand_expr ((empty_record
+	  size_rtx = expand_expr ((empty_type
 				   ? size_zero_node
 				   : size_in_bytes (TREE_TYPE (pval))),
 				  NULL_RTX, TYPE_MODE (sizetype),
@@ -5104,7 +5104,7 @@ must_pass_in_stack_var_size_or_pad (machine_mode mode, const_tree type)
   if (TREE_ADDRESSABLE (type))
     return true;
 
-  if (type_is_empty_record_p (type))
+  if (type_is_empty_type_p (type))
     return false;
 
   /* If the padding and mode of the type is such that a copy into

@@ -114,7 +114,7 @@ unpack_ts_base_value_fields (struct bitpack_d *bp, tree expr)
     }
   else
     {
-      TYPE_EMPTY_RECORD (expr) = (unsigned) bp_unpack_value (bp, 1);
+      TYPE_EMPTY_TYPE (expr) = (unsigned) bp_unpack_value (bp, 1);
       bp_unpack_value (bp, 3);
     }
   TREE_ADDRESSABLE (expr) = (unsigned) bp_unpack_value (bp, 1);

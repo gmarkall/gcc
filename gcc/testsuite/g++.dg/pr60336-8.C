@@ -10,6 +10,6 @@ void
 foo ()
 {
   struct dummy a0;
-  test1 (a0); // { dg-message "note: the ABI of passing empty record has changed in GCC 6" }
-  test2 (a0); // { dg-message "note: the ABI of passing empty record has changed in GCC 6" }
+  test1 (a0); // { dg-message "note: the ABI of passing empty type has changed in GCC 6" }
+  test2 (a0); // { dg-message "note: the ABI of passing empty type has changed in GCC 6" }
 }

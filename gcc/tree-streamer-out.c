@@ -84,7 +84,7 @@ pack_ts_base_value_fields (struct bitpack_d *bp, tree expr)
     }
   else
     {
-      bp_pack_value (bp, TYPE_EMPTY_RECORD (expr), 1);
+      bp_pack_value (bp, TYPE_EMPTY_TYPE (expr), 1);
       bp_pack_value (bp, 0, 3);
     }
   bp_pack_value (bp, TREE_ADDRESSABLE (expr), 1);

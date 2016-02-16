@@ -3,10 +3,18 @@
 
 #include <stdarg.h>
 
-struct dummy { };
+struct dummy0
+{
+  void bar (void);
+};
+struct dummy1
+{
+  void foo (void);
+};
+struct dummy : dummy0, dummy1 { };
 
 void
-test (struct dummy a, int m, ...) // { dg-message "note: the ABI of passing empty type has changed in GCC 6" }
+test (struct dummy a, int m, ...)
 {
   va_list va_arglist;
   int i;
@@ -43,6 +51,6 @@ struct dummy a0;
 int
 main ()
 {
-  test (a0, 0, 1, 2, 3, 4, 5, 6); // { dg-message "note: the ABI of passing empty type has changed in GCC 6" }
+  test (a0, 0, 1, 2, 3, 4, 5, 6);
   return 0;
 }

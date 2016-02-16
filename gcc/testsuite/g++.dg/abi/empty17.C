@@ -1,10 +1,10 @@
 // PR c++/60336
 // { dg-do run }
 // { dg-options "-x c" }
-// { dg-additional-sources "empty15a.c" }
+// { dg-additional-sources "empty17a.c" }
 // { dg-prune-output "command line option" }
 
-#include "empty15.h"
+#include "empty17.h"
 extern "C" void fun(struct dummy, struct foo);
 
 int main()

@@ -383,7 +383,7 @@ ubsan_type_descriptor (tree type, enum ubsan_print_style pstyle)
 		 TYPE_VOLATILE (type2) ? "volatile " : "",
 		 TYPE_READONLY (type2) ? "const " : "",
 		 TYPE_RESTRICT (type2) ? "restrict " : "",
-		 TYPE_EMPTY_RECORD (type2) ? "empty-record " : "",
+		 TYPE_EMPTY_TYPE (type2) ? "empty-type" : "",
 		 TYPE_ATOMIC (type2) ? "_Atomic " : "",
 		 TREE_CODE (type2) == RECORD_TYPE
 		 ? "struct "
