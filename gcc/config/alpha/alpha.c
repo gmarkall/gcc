@@ -6303,8 +6303,8 @@ alpha_gimplify_va_arg_1 (tree type, tree base, tree offset,
   gimple_seq_add_seq (pre_p, internal_post);
 
   /* Update the offset field.  */
-  bool empty_record = type && type_is_empty_record_p (type);
-  type_size = empty_record ? 0 : TYPE_SIZE_UNIT (TYPE_MAIN_VARIANT (type));
+  bool empty_type = type && type_is_empty_type_p (type);
+  type_size = empty_type ? 0 : TYPE_SIZE_UNIT (TYPE_MAIN_VARIANT (type));
   if (type_size == NULL || TREE_OVERFLOW (type_size))
     t = size_zero_node;
   else

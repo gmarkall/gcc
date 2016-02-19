@@ -421,8 +421,8 @@ tilepro_gimplify_va_arg_expr (tree valist, tree type, gimple_seq * pre_p,
   if (pass_by_reference_p)
     type = build_pointer_type (type);
 
-  bool empty_record = type && type_is_empty_record_p (type);
-  size = empty_record ? 0 : int_size_in_bytes (type);
+  bool empty_type = type && type_is_empty_type_p (type);
+  size = empty_type ? 0 : int_size_in_bytes (type);
   rsize = ((size + UNITS_PER_WORD - 1) / UNITS_PER_WORD) * UNITS_PER_WORD;
 
   /* If the alignment of the type is greater than the default for a
