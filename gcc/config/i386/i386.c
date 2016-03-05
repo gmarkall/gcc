@@ -14732,7 +14732,7 @@ darwin_local_data_pic (rtx disp)
    satisfies CONSTANT_P.  */
 
 static bool
-ix86_legitimate_constant_p (machine_mode, rtx x)
+ix86_legitimate_constant_p (machine_mode mode, rtx x)
 {
   /* Pointer bounds constants are not valid.  */
   if (POINTER_BOUNDS_MODE_P (GET_MODE (x)))
@@ -14799,7 +14799,14 @@ ix86_legitimate_constant_p (machine_mode, rtx x)
       break;
 
     case CONST_WIDE_INT:
-      if (!TARGET_64BIT && !standard_sse_constant_p (x))
+      if (!TARGET_64BIT
+	  && !standard_sse_constant_p (x)
+	  && GET_MODE_SIZE (TARGET_AVX512F
+			    ? XImode
+			    : (TARGET_AVX
+			       ? OImode
+			       : (TARGET_SSE2
+				  ? TImode : DImode))) < GET_MODE_SIZE (mode))
 	return false;
       break;
 
@@ -19088,20 +19095,33 @@ ix86_expand_move (machine_mode mode, rtx operands[])
 	  && optimize)
 	op1 = copy_to_mode_reg (mode, op1);
 
-      if (can_create_pseudo_p ()
-	  && CONST_DOUBLE_P (op1))
+      if (can_create_pseudo_p ())
 	{
-	  /* If we are loading a floating point constant to a register,
-	     force the value to memory now, since we'll get better code
-	     out the back end.  */
-
-	  op1 = validize_mem (force_const_mem (mode, op1));
-	  if (!register_operand (op0, mode))
+	  if (CONSTANT_P (op1))
 	    {
-	      rtx temp = gen_reg_rtx (mode);
-	      emit_insn (gen_rtx_SET (temp, op1));
-	      emit_move_insn (op0, temp);
-	      return;
+	      /* If we are loading a floating point constant to a
+		 register or loading an integer constant to a vector
+		 register, force the value to memory now, since
+		 we'll get better code out the back end.  */
+	      if (CONST_DOUBLE_P (op1)
+		  || ((CONST_INT_P (op1) || CONST_WIDE_INT_P (op1))
+		      && (mode == XImode
+			  || mode == OImode
+			  || (mode == TImode && !TARGET_64BIT))
+		      && !standard_sse_constant_p (op1)))
+		{
+		  op1 = validize_mem (force_const_mem (mode, op1));
+		  if (!register_operand (op0, mode))
+		    op1 = force_reg (mode, op1);
+		}
+	    }
+	  else if (GET_MODE_SIZE (mode) > UNITS_PER_WORD
+		   && push_operand (op0, mode))
+	    {
+	      /* We can only push up to UNITS_PER_WORD.  */
+	      op0 = emit_move_resolve_push (mode, op0);
+	      if (MEM_P (op1))
+		op1 = force_reg (mode, op1);
 	    }
 	}
     }
