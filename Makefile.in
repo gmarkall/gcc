@@ -43596,4 +43596,9 @@ $(srcdir)/configure: @MAINT@ $(srcdir)/configure.ac $(srcdir)/config/acx.m4 \
 .NOEXPORT:
 MAKEOVERRIDES=
 
+# cc1 build only
+.PHONY: cc1
+cc1:
+	make all-gcc TARGET-gcc=cc1$(exeext)
+
 # end of Makefile.in

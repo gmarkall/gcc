@@ -442,6 +442,9 @@ sparc*-*-*)
 	extra_headers="visintrin.h"
 	need_64bit_hwint=yes
 	;;
+spim*-*-*)
+	cpu_type=spim
+	;;
 spu*-*-*)
 	cpu_type=spu
 	need_64bit_hwint=yes
@@ -2204,6 +2207,16 @@ score-*-elf)
 	gnu_ld=yes
         tm_file="dbxelf.h elfos.h score/elf.h score/score.h newlib-stdint.h"
         ;;
+spim*-*-*)
+	gas=no
+	gnu_ld=no
+	file_base="`echo ${target} | sed 's/-.*$//'`"
+	tm_file="${cpu_type}/${file_base}.h"
+	md_file="${cpu_type}/${file_base}.md"
+	out_file="${cpu_type}/${file_base}.c"
+	tm_p_file="${cpu_type}/${file_base}-protos.h"
+	echo ${target}
+	;;
 sh-*-elf* | sh[12346l]*-*-elf* | \
   sh-*-linux* | sh[2346lbe]*-*-linux* | \
   sh-*-netbsdelf* | shl*-*-netbsdelf* | sh5-*-netbsd* | sh5l*-*-netbsd* | \
