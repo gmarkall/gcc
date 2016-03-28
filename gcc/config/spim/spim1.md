@@ -157,6 +157,27 @@
 
 )
 
+(define_insn "ashlsi3"
+        [(set (match_operand:SI 0 "register_operand" "=r,r")
+              (ashift:SI (match_operand:SI 1 "register_operand" "r,r")
+                         (match_operand:SI 2 "nonmemory_operand" "r,K"))
+         )]
+        ""
+        "@
+         sllv \\t%0, %1, %2
+         sll \\t%0, %1, %c2"
+
+)
+
+(define_insn "subsi3"
+        [(set (match_operand:SI 0 "register_operand" "=r")
+              (minus:SI (match_operand:SI 1 "register_operand" "r")
+                        (match_operand:SI 2 "register_operand" "r"))
+         )]
+        ""
+        "sub\\t%0, %1, %2"
+)
+
 (define_expand "prologue"
 	[(clobber (const_int 0))]
 	""
