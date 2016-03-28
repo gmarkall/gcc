@@ -178,6 +178,32 @@
         "sub\\t%0, %1, %2"
 )
 
+(define_expand "mulsi3"
+        [(set (match_operand:SI 0 "register_operand" "=r,")
+              (mult:SI (match_operand:SI 1 "nonmemory_operand" "r,K")
+                       (match_operand:SI 2 "nonmemory_operand" "K,r"))
+         )]
+        ""
+        {
+                int i, k;
+                rtx op;
+                if(GET_CODE(operands[1])==CONST_INT) {
+                    k = INTVAL(operands[1]);
+                    op = operands[2];
+                }
+                else {
+                    k = INTVAL(operands[2]);
+                    op = operands[1];
+                }
+                emit_insn(gen_IITB_move_zero(operands[0],gen_rtx_REG(SImode,0)));
+                for (i=0; i<k; i++) {
+                    emit_insn(gen_addsi3(operands[0], operands[0], op));
+                }
+                DONE;
+        }
+)
+
+
 (define_expand "prologue"
 	[(clobber (const_int 0))]
 	""
