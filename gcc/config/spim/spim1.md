@@ -195,6 +195,10 @@
                     k = INTVAL(operands[2]);
                     op = operands[1];
                 }
+                if (k < 0) {
+                    fprintf(stderr, "Cannot compile with negative constants\n");
+                    exit(1);
+                }
                 emit_insn(gen_IITB_move_zero(operands[0],gen_rtx_REG(SImode,0)));
                 for (i=0; i<k; i++) {
                     emit_insn(gen_addsi3(operands[0], operands[0], op));
