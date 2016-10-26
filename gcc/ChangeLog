@@ -1,5 +1,9 @@
 2016-10-26  Andrew Burgess  <andrew.burgess@embecosm.com>
 
+	* config/arc/arc.md (movdi): Use prepare_move_operands.
+
+2016-10-26  Andrew Burgess  <andrew.burgess@embecosm.com>
+
 	* config.gcc (arc*-*-linux-uclibc*, arc*-*-elf*, arc*-*-*): Add
 	nps400 to the with-cpu list.
 

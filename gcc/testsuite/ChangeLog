@@ -1,3 +1,7 @@
+2016-10-26  Andrew Burgess  <andrew.burgess@embecosm.com>
+
+	* gcc.target/arc/mov-pic.c: New file.
+
 2016-10-26  Jakub Jelinek  <jakub@redhat.com>
 
 	PR fortran/77973
