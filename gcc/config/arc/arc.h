@@ -121,7 +121,7 @@ extern const char *arc_cpu_to_as (int argc, const char **argv);
 		   -X %{mbig-endian:-EB} \
 		   %{EB} %{EL} \
 		   %{marclinux*} \
-		   %{!marclinux*: %{pg|p|profile:-marclinux_prof;: -marclinux}} \
+		   %{!marclinux*: %{pg|p|profile:-marclinux_prof; mcpu=nps400:-marclinux_nps; :-marclinux}} \
 		   %{!z:-z max-page-size=0x2000 -z common-page-size=0x2000} \
 		   %{shared:-shared}"
 #else
