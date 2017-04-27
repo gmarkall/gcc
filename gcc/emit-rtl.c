@@ -2876,6 +2876,9 @@ verify_rtl_sharing (void)
 
   timevar_push (TV_VERIFY_RTL_SHARING);
 
+  if (getenv ("APB_DO_RTL_SHARING_CHECK") != NULL)
+    {
+
   reset_all_used_flags ();
 
   for (p = get_insns (); p; p = NEXT_INSN (p))
@@ -2894,6 +2897,7 @@ verify_rtl_sharing (void)
       }
 
   reset_all_used_flags ();
+    }
 
   timevar_pop (TV_VERIFY_RTL_SHARING);
 }
