@@ -1,3 +1,8 @@
+2017-05-12  Graham Markall  <graham.markall@embecosm.com>
+
+	* gcc.target/arc/add_n-combine.c: New.
+	* gcc.target/arc/sub_n-combine.c: New.
+
 2017-05-12  Will Schmidt  <will_schmidt@vnet.ibm.com>
 
 	* gcc.target/powerpc/fold-vec-div-float.c: New.

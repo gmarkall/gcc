@@ -1,3 +1,10 @@
+2017-05-12  Graham Markall  <graham.markall@embecosm.com>
+
+	* config/arc/arc.c (arc_print_operand): Handle constant operands.
+	(arc_rtx_costs): Add costs for new patterns.
+	* config/arc/arc.md: Additional *add_n and *sub_n patterns.
+	* config/arc/predicates.md: Add _1_2_3_operand predicate.
+
 2017-05-12  Will Schmidt  <will_schmidt@vnet.ibm.com>
 
 	* config/rs6000/rs6000.c (rs6000_gimple_fold_builtin): Add handling for
