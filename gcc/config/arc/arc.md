@@ -2971,11 +2971,11 @@
 
 (define_insn "*add_n"
   [(set (match_operand:SI 0 "dest_reg_operand" "=Rcqq,Rcw,W,W,w,w")
-	(plus:SI (mult:SI (match_operand:SI 1 "register_operand" "Rcqq,c,c,c,c,c")
-			  (match_operand:SI 2 "_2_4_8_operand" ""))
+	(plus:SI (ashift:SI (match_operand:SI 1 "register_operand" "Rcqq,c,c,c,c,c")
+	                    (match_operand:SI 2 "_1_2_3_operand" ""))
 		 (match_operand:SI 3 "nonmemory_operand" "0,0,c,?Cal,?c,??Cal")))]
   ""
-  "add%z2%? %0,%3,%1%&"
+  "add%c2%? %0,%3,%1%&"
   [(set_attr "type" "shift")
    (set_attr "length" "*,4,4,8,4,8")
    (set_attr "predicable" "yes,yes,no,no,no,no")
@@ -2987,10 +2987,10 @@
 (define_insn "*sub_n"
   [(set (match_operand:SI 0 "dest_reg_operand" "=Rcw,w,w")
 	(minus:SI (match_operand:SI 1 "nonmemory_operand" "0,c,?Cal")
-		  (mult:SI (match_operand:SI 2 "register_operand" "c,c,c")
-			   (match_operand:SI 3 "_2_4_8_operand" ""))))]
+		  (ashift:SI (match_operand:SI 2 "register_operand" "c,c,c")
+			     (match_operand:SI 3 "_1_2_3_operand" ""))))]
   ""
-  "sub%z3%? %0,%1,%2"
+  "sub%c3%? %0,%1,%2"
   [(set_attr "type" "shift")
    (set_attr "length" "4,4,8")
    (set_attr "predicable" "yes,no,no")
