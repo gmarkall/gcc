@@ -84,7 +84,44 @@ estimate_edge_growth (struct cgraph_edge *edge)
 {
   ipa_call_summary *s = ipa_call_summaries->get (edge);
   gcc_checking_assert (s->call_stmt_size || !edge->callee->analyzed);
-  return (estimate_edge_size (edge) - s->call_stmt_size);
+
+  if (dump_file)
+    {
+      const char *caller_name
+	= edge->caller->ultimate_alias_target ()->name ();
+      const char *callee_name
+	= edge->callee->ultimate_alias_target ()->name ();
+
+      fprintf (dump_file, "Estimate edge growth for %s -> %s\n",
+	       caller_name, callee_name);
+      fprintf (dump_file, "\t estimate_edge_size = %d\n",
+	       estimate_edge_size (edge));
+      fprintf (dump_file, "\t s (%p) ->call_stmt_size = %d\n",
+	       ((void *) s), s->call_stmt_size);
+    }
+
+  int growth = (estimate_edge_size (edge) - s->call_stmt_size);
+
+  int sz = 0;
+  if (flag_inline_growth_bias)
+    sz = strtol(flag_inline_growth_bias, NULL, 0);
+  if (sz != 0)
+    {
+      struct cgraph_node *caller = edge->caller;
+      ipa_fn_summary *fs = ipa_fn_summaries->get (caller);
+      if (dump_file)
+	fprintf (dump_file, "\t Adjusting growth by %d\n", sz);
+      growth += sz;
+      if (growth < 0 && fs->size + growth < 0) {
+	if (dump_file)
+          fprintf (dump_file, "\t Growth %d would shrink size beneath zero.\n", growth);
+	growth = -fs->size;
+        if (dump_file)
+	  fprintf (dump_file, "\t Setting growth to %d to make size zero.\n", growth);
+      }
+    }
+
+  return growth;
 }
 
 /* Return estimated callee runtime increase after inlining
