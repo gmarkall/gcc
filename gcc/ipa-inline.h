@@ -121,6 +121,13 @@ estimate_edge_growth (struct cgraph_edge *edge)
       }
     }
 
+  /* Parameters such as inline-fnsize-bias can reduce growth below 0. In these
+     cases, we cap the reduction in size to the size of the function.  */
+  struct cgraph_node *caller = edge->caller;
+  ipa_fn_summary *fs = ipa_fn_summaries->get (caller);
+  if (fs->size + growth < 0)
+    growth = -fs->size;
+
   return growth;
 }
 

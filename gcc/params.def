@@ -112,6 +112,11 @@ DEFPARAM (PARAM_INLINE_HEURISTICS_HINT_PERCENT_O2,
 	  "The scale (in percents) applied to inline-insns-single and auto limits when heuristics hints that inlining is very profitable.",
 	  200, 100, 1000000)
 
+DEFPARAM (PARAM_INLINE_FNSIZE_BIAS,
+	  "inline-fnsize-bias",
+	  "Instruction bias of inlining growth overhead.",
+	  5, 0, 1000000)
+
 DEFPARAM (PARAM_MAX_INLINE_INSNS_SIZE,
 	  "max-inline-insns-size",
 	  "The maximum number of instructions when inlining for size.",

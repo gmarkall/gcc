@@ -2529,6 +2529,16 @@ analyze_function_body (struct cgraph_node *node, bool early)
     }
 }
 
+/* Bias a function size according to the bias parameter. The default is
+   parameter value is 5 to allow for slight negative biases, so we subtract 5
+   to allow an effective default value of 0.  */
+
+int
+apply_inline_fnsize_bias (int size)
+{
+  return MAX (0, (size + PARAM_VALUE (PARAM_INLINE_FNSIZE_BIAS) - 5));
+}
+
 
 /* Compute function summary.
    EARLY is true when we compute parameters during early opts.  */
@@ -2627,6 +2637,8 @@ compute_fn_summary (struct cgraph_node *node, bool early)
     if (e->callee->comdat_local_p ())
       break;
   node->calls_comdat_local = (e != NULL);
+
+  info->self_size = apply_inline_fnsize_bias (info->self_size);
 
   /* Inlining characteristics are maintained by the cgraph_mark_inline.  */
   info->size = info->self_size;
@@ -3262,6 +3274,8 @@ ipa_update_overall_fn_summary (struct cgraph_node *node)
 				~(clause_t) (1 << predicate::false_condition),
 				vNULL, vNULL, vNULL);
   info->size = (info->size + ipa_fn_summary::size_scale / 2) / ipa_fn_summary::size_scale;
+
+  info->size = apply_inline_fnsize_bias (info->size);
 }
 
 
