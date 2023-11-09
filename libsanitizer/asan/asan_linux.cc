@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <unwind.h>
+#include <signal.h>
 
 #if !ASAN_ANDROID
 // FIXME: where to get ucontext on Android?
